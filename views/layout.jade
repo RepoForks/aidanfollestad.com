@@ -1,0 +1,60 @@
+doctype html
+html
+    head
+        title Aidan &#8212; #{title}
+
+        meta(name="google-site-verification", content="4ZjTe9IKlmXji38JMzI40gdkOnzghjx-ePuZ0ydDPUM")
+
+        // jQuery
+        script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.1.min.js')
+        // Compiled and minified CSS
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.3/css/materialize.min.css')
+        // Compiled and minified JavaScript
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.3/js/materialize.min.js')
+        // Main CSS
+        link(rel='stylesheet', type='text/css' href='/css/main.css')
+
+        block addcss
+        meta(name='viewport', content='width=device-width, initial-scale=1.0, user-scalable=no')
+        meta(name='theme-color', content='#1E88E5')
+
+    body
+        header
+            nav(class='top-nav')
+                div(class='nav-wrapper blue darken-1')
+                    a(href='/', class='page-title') #{title}
+                    ul(id="slide-out" class="side-nav fixed")
+                        if homeActive
+                            li(class='active'): a(href='//aidanfollestad.com', class='waves-effect') Home
+                        else
+                            li: a(href='//aidanfollestad.com', class='waves-effect') Home
+                        if aboutActive
+                            li(class='active'): a(href='//aidanfollestad.com/about', class='waves-effect') About
+                        else
+                            li: a(href='//aidanfollestad.com/about', class='waves-effect') About
+                        if skillsActive
+                            li(class='active'): a(href='//aidanfollestad.com/skills', class='waves-effect') Skills
+                        else
+                            li: a(href='//aidanfollestad.com/skills', class='waves-effect') Skills
+                        if projectsActive
+                            li(class='active'): a(href='//aidanfollestad.com/projects', class='waves-effect') Projects
+                        else
+                            li: a(href='//aidanfollestad.com/projects', class='waves-effect') Projects
+                        if workActive
+                            li(class='active'): a(href='//aidanfollestad.com/work', class='waves-effect') Work
+                        else
+                            li: a(href='//aidanfollestad.com/work', class='waves-effect') Work
+                        if socialActive
+                            li(class='active'): a(href='//aidanfollestad.com/social', class='waves-effect') Social
+                        else
+                            li: a(href='//aidanfollestad.com/social', class='waves-effect') Social
+
+                    a(href="#", data-activates="slide-out", class="button-collapse"): i(class="mdi-navigation-menu")
+
+        main(class='mainContent')
+            .container
+                block content
+
+        script(src='/js/init.js')
+        script(src='/js/analytics.js')
+        block scripts

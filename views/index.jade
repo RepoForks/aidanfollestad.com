@@ -1,0 +1,23 @@
+extends layout
+
+block addcss
+    link(rel="stylesheet", type="text/css" href="/css/kudosplease.css")
+
+block content
+    div(class='valign-wrapper center-align')
+        div(class='valign center-align')
+            h2 Welcome!
+            div(class="kudos", data-amount="0", data-url="aidanfollestad.com")
+
+        script(src="/js/kudosplease-min.js")
+        script.
+            new KudosPlease({
+                el: '.kudos',
+                duration: 2000,
+                persistent: true,
+                status: {
+                    alpha: 'fontelico-emo-shoot',
+                    beta: 'fontelico-emo-shoot',
+                    gamma: 'fontelico-emo-beer'
+                }
+            });
