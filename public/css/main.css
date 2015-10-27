@@ -111,6 +111,11 @@ a {
     height: auto;
 }
 
+.app-image-small {
+    max-width: 40%;
+    height: auto;
+}
+
 .valign-wrapper, .valign {
     position: absolute;
     top: 50%;
@@ -258,6 +263,10 @@ header, main, footer {
     .app-image {
         width: 90%;
     }
+    
+    .app-image-small {
+        width: 36%;
+    }
 }
 
 @media only screen and (min-width: 1400px) {
@@ -265,11 +274,19 @@ header, main, footer {
     .app-image {
         width: 80%;
     }
+    
+    .app-image-small {
+        max-width: 32%;
+    }
 }
 
 @media only screen and (min-width: 1700px) {
     /* Even larger desktops */
     .app-image {
         width: 70%;
+    }
+    
+    .app-image-small {
+        max-width: 25%;
     }
 }
