@@ -59,7 +59,6 @@ function onListening() {
 
 // HTTP redirects to HTTPS
 http.createServer(function (req, res) {
-    console.log('Redirecting to ' + "https://" + req.headers['host'] + req.url);
     res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
     res.end();
 }).listen(80, function () {
@@ -72,11 +71,9 @@ https.createServer(options, function (req, res) {
 
     switch (hostname) {
         case 'polar.aidanfollestad.com':
-            console.log('Redirecting to port 3000.');
             proxy.web(req, res, {target: 'https://aidanfollestad.com:3000'});
             break;
         default:
-            console.log('Redirecting to port 8080.');
             proxy.web(req, res, {target: 'https://aidanfollestad.com:8080'});
             break;
     }
