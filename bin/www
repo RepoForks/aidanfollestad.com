@@ -66,7 +66,7 @@ http.createServer(function (req, res) {
     console.log('Redirection server listening on port 80');
 });
 
-https.createServer(function (req, res) {
+https.createServer(options, function (req, res) {
     var hostname = req.headers.host.split(":")[0];
     // var pathname = url.parse(req.url).pathname;
 
