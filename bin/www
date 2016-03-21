@@ -1,21 +1,31 @@
 #!/usr/local/bin/node
 var app = require('../app');
-var httpProxy = require('http-proxy');
+var httpProxy = require('http-proxy'),
+    http = require('http'),
+    proxy = httpProxy.createProxyServer({}),
+    url = require('url');
 
-app.set('port', process.env.PORT || 8080);
-
-var options = {
-    router: {
-        'aidanfollestad.com': '127.0.0.1:8080',
-        'polar.aidanfollestad.com': '127.0.0.1:3000'
-    }
-};
-
-var server = app.listen(app.get('port'), function () {
-    console.log('Main server listening on port ' + server.address().port);
+var mainPort = 8080;
+var server = app.listen(mainPort, function () {
+    console.log('Main server listening on port ' + mainPort);
 });
 
 var proxyPort = 80;
-var proxyServer = httpProxy.createServer(options);
-proxyServer.listen(proxyPort);
-console.log('Proxy server listening on port ' + proxyPort);
+http.createServer(function (req, res) {
+    var hostname = req.headers.host.split(":")[0];
+    var pathname = url.parse(req.url).pathname;
+
+    console.log(hostname);
+    console.log(pathname);
+
+    switch (hostname) {
+        case 'polar.aidanfollestad.com':
+            proxy.web(req, res, {target: 'https://aidanfollestad.com:3000'});
+            break;
+        default:
+            proxy.web(req, res, {target: 'http://aidanfollestad.com:8080'});
+            break;
+    }
+}).listen(proxyPort, function () {
+    console.log('Proxy server listening on port ' + proxyPort);
+});
