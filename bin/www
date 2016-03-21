@@ -59,6 +59,7 @@ function onListening() {
 
 // HTTP redirects to HTTPS
 http.createServer(function (req, res) {
+    console.log('Redirecting to secure.');
     res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
     res.end();
 }).listen(80);
