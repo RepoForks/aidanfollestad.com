@@ -2,21 +2,69 @@
 var app = require('../app');
 var httpProxy = require('http-proxy'),
     http = require('http'),
+    https = require('https'),
     proxy = httpProxy.createProxyServer({}),
-    url = require('url');
+    url = require('url'),
+    fs = require('fs');
 
-var mainPort = 8080;
-var server = app.listen(mainPort, function () {
-    console.log('Main server listening on port ' + mainPort);
-});
+var ca = fs.readFileSync('/var/www/ssl/STAR_aidanfollestad_com.ca-bundle', 'utf8');
+var key = fs.readFileSync('/var/www/ssl/aidanfollestad_com.key', 'utf8');
+var cert = fs.readFileSync('/var/www/ssl/STAR_aidanfollestad_com.crt', 'utf8');
+var options = {
+    ca: ca,
+    key: key,
+    cert: cert
+};
 
-var proxyPort = 80;
-http.createServer(function (req, res) {
-    if (!req.secure) {
-        //FYI this should work for local development as well
-        return res.redirect('https://' + req.headers.host + req.url);
+// Main server, listens on 8080 with HTTPS
+var server = https.createServer(options, app);
+server.listen(8080);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
     }
 
+    var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    console.log('Main server listening on ' + bind);
+}
+
+// HTTP redirects to HTTPS
+http.createServer(function (req, res) {
+    res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
+    res.end();
+}).listen(80);
+console.log('Redirection server listening on port 80');
+
+https.createServer(function (req, res) {
     var hostname = req.headers.host.split(":")[0];
     // var pathname = url.parse(req.url).pathname;
 
@@ -28,9 +76,9 @@ http.createServer(function (req, res) {
             proxy.web(req, res, {target: 'https://aidanfollestad.com:3000'});
             break;
         default:
-            proxy.web(req, res, {target: 'http://aidanfollestad.com:8080'});
+            proxy.web(req, res, {target: 'https://aidanfollestad.com:8080'});
             break;
     }
-}).listen(proxyPort, function () {
-    console.log('Proxy server listening on port ' + proxyPort);
+}).listen(443, function () {
+    console.log('Proxy server listening on port 443');
 });
