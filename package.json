@@ -13,6 +13,7 @@
     "debug": "*",
     "jade": "*",
     "request": "*",
-    "method-override": "*"
+    "method-override": "*",
+    "http-proxy": "*"
   }
 }

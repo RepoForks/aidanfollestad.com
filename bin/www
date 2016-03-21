@@ -1,8 +1,21 @@
 #!/usr/local/bin/node
 var app = require('../app');
+var httpProxy = require('http-proxy');
 
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 8080);
+
+var options = {
+    router: {
+        'aidanfollestad.com': '127.0.0.1:8080',
+        'polar.aidanfollestad.com': '127.0.0.1:3000'
+    }
+};
 
 var server = app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + server.address().port);
+    console.log('Main server listening on port ' + server.address().port);
 });
+
+var proxyPort = 80;
+var proxyServer = httpProxy.createServer(options);
+proxyServer.listen(proxyPort);
+console.log('Proxy server listening on port ' + proxyPort);
