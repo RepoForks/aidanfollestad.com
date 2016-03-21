@@ -13,13 +13,13 @@ var server = app.listen(mainPort, function () {
 var proxyPort = 80;
 http.createServer(function (req, res) {
     var hostname = req.headers.host.split(":")[0];
-    var pathname = url.parse(req.url).pathname;
-
-    console.log(hostname);
-    console.log(pathname);
+    // var pathname = url.parse(req.url).pathname;
 
     switch (hostname) {
         case 'polar.aidanfollestad.com':
+            proxy.web(req, res, {target: 'https://aidanfollestad.com:3000'});
+            break;
+        case 'www.aidanfollestad.com':
             proxy.web(req, res, {target: 'https://aidanfollestad.com:3000'});
             break;
         default:
