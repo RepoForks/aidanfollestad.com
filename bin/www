@@ -70,12 +70,15 @@ https.createServer(function (req, res) {
 
     switch (hostname) {
         case 'polar.aidanfollestad.com':
+            console.log('Redirecting to port 3000.');
             proxy.web(req, res, {target: 'https://aidanfollestad.com:3000'});
             break;
         case 'www.aidanfollestad.com':
+            console.log('Redirecting to port 3000.');
             proxy.web(req, res, {target: 'https://aidanfollestad.com:3000'});
             break;
         default:
+            console.log('Redirecting to port 8080.');
             proxy.web(req, res, {target: 'https://aidanfollestad.com:8080'});
             break;
     }
