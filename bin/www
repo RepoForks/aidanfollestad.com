@@ -87,3 +87,7 @@ https.createServer(options, function (req, res) {
 }).listen(443, function () {
     console.log('Proxy server listening on port 443');
 });
+
+proxy.on('error', function (e) {
+    console.log('PROXY ERROR: ' + e);
+});
