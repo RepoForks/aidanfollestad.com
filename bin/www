@@ -69,6 +69,11 @@ http.createServer(function (req, res) {
 });
 
 https.createServer(options, function (req, res) {
+    if (!req.headers || !req.headers.host) {
+        res.statusCode = 400;
+        res.end('No Host header specified.');
+        return;
+    }
     var hostname = req.headers.host.split(":")[0];
     // var pathname = url.parse(req.url).pathname;
 
