@@ -71,7 +71,10 @@ http.createServer(function (req, res) {
 https.createServer(options, function (req, res) {
     if (!req.headers || !req.headers.host) {
         res.statusCode = 400;
-        res.end('No Host header specified.');
+        res.writeHead(400, {
+            "Content-Type": "application/json"
+        });
+        res.end('{"status":"error","error":"No host header specified."}');
         return;
     }
     var hostname = req.headers.host.split(":")[0];
