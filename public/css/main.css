@@ -18,6 +18,7 @@ hr {
 .flow-text, p {
     font-size: 18px;
     color: #D5D5D5;
+    line-height: 160%;
 }
 
 td {
