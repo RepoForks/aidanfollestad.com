@@ -215,7 +215,7 @@ header, main, footer {
     }
 
     .homeParagraph {
-        width: 90%;
+        width: 40%;
     }
 }
 
@@ -249,7 +249,7 @@ header, main, footer {
     }
 
     .homeParagraph {
-        width: 90%;
+        width: 50%;
     }
 }
 
@@ -284,7 +284,7 @@ header, main, footer {
     }
 
     .homeParagraph {
-        width: 80%;
+        width: 60%;
     }
 }
 
@@ -314,6 +314,6 @@ header, main, footer {
     }
 
     .homeParagraph {
-        width: 60%;
+        width: 80%;
     }
 }
