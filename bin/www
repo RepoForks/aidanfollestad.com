@@ -85,6 +85,9 @@ https.createServer(options, function (req, res) {
             case 'polar.aidanfollestad.com':
                 proxy.web(req, res, {target: 'https://aidanfollestad.com:3000', https: true});
                 break;
+            case 'polar-dev.aidanfollestad.com':
+                proxy.web(req, res, {target: 'https://aidanfollestad.com:3001', https: true});
+                break;
             default:
                 proxy.web(req, res, {target: 'https://aidanfollestad.com:8080', https: true});
                 break;
