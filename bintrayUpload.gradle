@@ -33,16 +33,12 @@ artifacts {
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-def user = properties.getProperty("bintray.user")
-def key = properties.getProperty("bintray.apikey")
-def gpgPass = properties.getProperty("bintray.gpg.password")
-
-println("BINTRAY USER: " + user)
-println("BINTRAY KEY:  " + key);
-
 bintray {
-    user = key
-    key = user
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    println("BINTRAY USER: " + user)
+    println("BINTRAY KEY:  " + key)
 
     configurations = ['archives']
     pkg {
@@ -54,11 +50,12 @@ bintray {
         licenses = allLicenses
         publish = true
         publicDownloadNumbers = true
+
         version {
             desc = libraryDescription
             gpg {
-                sign = gpgPass != null && !gpgPass.isEmpty()
-                passphrase = gpgPass
+                passphrase = properties.getProperty("bintray.gpg.password")
+                sign = passphrase != null && !passphrase.isEmpty()
             }
         }
     }
