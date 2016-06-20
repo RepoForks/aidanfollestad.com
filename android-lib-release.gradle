@@ -1,9 +1,9 @@
 // ./gradlew clean build generateRelease
 apply plugin: 'maven'
 
-def groupId = project.PUBLISH_GROUP_ID
-def artifactId = project.PUBLISH_ARTIFACT_ID
-def version = project.PUBLISH_VERSION
+group = project.PUBLISH_GROUP_ID
+archivesBaseName = project.PUBLISH_ARTIFACT_ID
+version = project.PUBLISH_VERSION
 
 def localReleaseDest = "${buildDir}/release/${version}"
 
