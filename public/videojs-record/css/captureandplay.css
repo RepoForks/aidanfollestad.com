@@ -33,6 +33,12 @@ nav .brand-logo {
     font-size: 1.8rem;
 }
 
+@media only screen and (max-width: 600px) {
+    nav .brand-logo {
+        padding-left: 0;
+    }
+}
+
 hr {
     display: block;
     height: 1px;
