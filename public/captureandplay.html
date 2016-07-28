@@ -74,6 +74,9 @@
 </div>
 
 <script>
+
+    var wavesurfer;
+
     $(document).ready(function () {
 
         var contentWidth = $('#body-content').width();
@@ -202,7 +205,7 @@
             console.log('snapshot ready: ', imagePlayer.recordedData);
         });
 
-        var wavesurfer = WaveSurfer.create({
+        wavesurfer = WaveSurfer.create({
             container: '#waveform',
             waveColor: 'violet',
             progressColor: 'purple',
