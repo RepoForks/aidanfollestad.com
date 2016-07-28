@@ -10,6 +10,7 @@
 
     <!-- WaveSurfer -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.52/wavesurfer.min.js"></script>
+    <script src="//collab-project.github.io/videojs-wavesurfer/dist/wavesurfer.microphone.min.js"/>
 
     <!-- VideoJS.Record and Related Plugins -->
     <script src="/videojs-record/videojs.record.min.js"></script>
@@ -110,20 +111,17 @@
                 }
             });
     // error handling
-    audioPlayer.on('deviceError', function()
-    {
+    audioPlayer.on('deviceError', function () {
         console.log('device error:', audioPlayer.deviceErrorCode);
     });
 
     // user clicked the record button and started recording
-    audioPlayer.on('startRecord', function()
-    {
+    audioPlayer.on('startRecord', function () {
         console.log('started recording!');
     });
 
     // user completed recording and stream is available
-    audioPlayer.on('finishRecord', function()
-    {
+    audioPlayer.on('finishRecord', function () {
         // the blob object contains the recorded data that
         // can be downloaded by the user, stored on server etc.
         console.log('finished recording: ', audioPlayer.recordedData);
