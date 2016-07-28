@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Capture and Playback Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1E88E5">
 
     <!-- Video.js -->
     <link href="//vjs.zencdn.net/5.8/video-js.min.css" rel="stylesheet">
@@ -56,114 +58,126 @@
 
 </div>
 
-<!-- SETUP VIDEO CAPTURE -->
 <script>
-    var videoPlayer = videojs("myVideo",
-            {
-                controls: true,
-                width: 320,
-                height: 240,
-                plugins: {
-                    record: {
-                        audio: true,
-                        video: true,
-                        maxLength: 10,
-                        debug: true
+    $(document).ready(function () {
+
+        var contentWidth = $('#body-content').width();
+
+        var defaultVideoWidth = 320;
+        var defaultVideoHeight = 240;
+        if (defaultVideoWidth > contentWidth) {
+            defaultVideoWidth = contentWidth;
+            defaultVideoHeight = contentWidth / (defaultVideoWidth / defaultVideoHeight);
+        }
+
+        var videoPlayer = videojs("myVideo",
+                {
+                    controls: true,
+                    width: defaultVideoWidth,
+                    height: defaultVideoHeight,
+                    plugins: {
+                        record: {
+                            audio: true,
+                            video: true,
+                            maxLength: 10,
+                            debug: true
+                        }
                     }
-                }
-            });
+                });
 
-    // error handling
-    videoPlayer.on('deviceError', function () {
-        console.log('device error:', videoPlayer.deviceErrorCode);
-    });
-    videoPlayer.on('error', function (error) {
-        console.log('error:', error);
-    });
+        // error handling
+        videoPlayer.on('deviceError', function () {
+            console.log('device error:', videoPlayer.deviceErrorCode);
+        });
+        videoPlayer.on('error', function (error) {
+            console.log('error:', error);
+        });
 
-    // user clicked the record button and started recording
-    videoPlayer.on('startRecord', function () {
-        console.log('started recording!');
-    });
+        // user clicked the record button and started recording
+        videoPlayer.on('startRecord', function () {
+            console.log('started recording!');
+        });
 
-    // user completed recording and stream is available
-    videoPlayer.on('finishRecord', function () {
-        // the blob object contains the recorded data that
-        // can be downloaded by the user, stored on server etc.
-        console.log('finished recording: ', videoPlayer.recordedData);
-    });
-</script>
+        // user completed recording and stream is available
+        videoPlayer.on('finishRecord', function () {
+            // the blob object contains the recorded data that
+            // can be downloaded by the user, stored on server etc.
+            console.log('finished recording: ', videoPlayer.recordedData);
+        });
 
-<!-- SETUP AUDIO-ONLY CAPTURE -->
-<script>
-    var audioPlayer = videojs("myAudio",
-            {
-                controls: true,
-                width: 600,
-                height: 300,
-                plugins: {
-                    wavesurfer: {
-                        src: "live",
-                        waveColor: "black",
-                        progressColor: "#2E732D",
-                        cursorWidth: 1,
-                        msDisplayMax: 20,
-                        hideScrollbar: true
+        var defaultAudioWidth = 600;
+        var defaultAudioHeight = 300;
+        if (defaultAudioWidth > contentWidth) {
+            defaultAudioWidth = contentWidth;
+            defaultAudioHeight = contentWidth / (defaultAudioWidth / defaultAudioHeight);
+        }
+
+        var audioPlayer = videojs("myAudio",
+                {
+                    controls: true,
+                    width: defaultAudioWidth,
+                    height: defaultAudioHeight,
+                    plugins: {
+                        wavesurfer: {
+                            src: "live",
+                            waveColor: "black",
+                            progressColor: "#2E732D",
+                            cursorWidth: 1,
+                            msDisplayMax: 20,
+                            hideScrollbar: true
+                        },
+                        record: {
+                            audio: true,
+                            video: false,
+                            maxLength: 20,
+                            debug: true
+                        }
+                    }
+                });
+        // error handling
+        audioPlayer.on('deviceError', function () {
+            console.log('device error:', audioPlayer.deviceErrorCode);
+        });
+
+        // user clicked the record button and started recording
+        audioPlayer.on('startRecord', function () {
+            console.log('started recording!');
+        });
+
+        // user completed recording and stream is available
+        audioPlayer.on('finishRecord', function () {
+            // the blob object contains the recorded data that
+            // can be downloaded by the user, stored on server etc.
+            console.log('finished recording: ', audioPlayer.recordedData);
+        });
+
+        var imagePlayer = videojs("myImage",
+                {
+                    controls: true,
+                    width: defaultVideoWidth,
+                    height: defaultVideoHeight,
+                    controlBar: {
+                        volumeMenuButton: false,
+                        fullscreenToggle: false
                     },
-                    record: {
-                        audio: true,
-                        video: false,
-                        maxLength: 20,
-                        debug: true
+                    plugins: {
+                        record: {
+                            image: true,
+                            debug: true
+                        }
                     }
-                }
-            });
-    // error handling
-    audioPlayer.on('deviceError', function () {
-        console.log('device error:', audioPlayer.deviceErrorCode);
-    });
+                });
+        // error handling
+        imagePlayer.on('deviceError', function () {
+            console.warn('device error:', imagePlayer.deviceErrorCode);
+        });
 
-    // user clicked the record button and started recording
-    audioPlayer.on('startRecord', function () {
-        console.log('started recording!');
-    });
-
-    // user completed recording and stream is available
-    audioPlayer.on('finishRecord', function () {
-        // the blob object contains the recorded data that
-        // can be downloaded by the user, stored on server etc.
-        console.log('finished recording: ', audioPlayer.recordedData);
-    });
-</script>
-
-<!-- SETUP IMAGE CAPTURE -->
-<script>
-    var imagePlayer = videojs("myImage",
-            {
-                controls: true,
-                width: 320,
-                height: 240,
-                controlBar: {
-                    volumeMenuButton: false,
-                    fullscreenToggle: false
-                },
-                plugins: {
-                    record: {
-                        image: true,
-                        debug: true
-                    }
-                }
-            });
-    // error handling
-    imagePlayer.on('deviceError', function () {
-        console.warn('device error:', imagePlayer.deviceErrorCode);
-    });
-
-    // snapshot is available
-    imagePlayer.on('finishRecord', function () {
-        // the blob object contains the image data that
-        // can be downloaded by the user, stored on server etc.
-        console.log('snapshot ready: ', imagePlayer.recordedData);
+        // snapshot is available
+        imagePlayer.on('finishRecord', function () {
+            // the blob object contains the image data that
+            // can be downloaded by the user, stored on server etc.
+            console.log('snapshot ready: ', imagePlayer.recordedData);
+        });
     });
 </script>
 

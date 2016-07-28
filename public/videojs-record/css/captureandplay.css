@@ -18,10 +18,14 @@
 html, body {
     margin: 0;
     padding: 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 #body-content {
     padding: 16px 24px;
+    width: 100%;
+    max-width: 100%;
 }
 
 nav .brand-logo {
@@ -36,4 +40,8 @@ hr {
     border-top: 1px solid #ccc;
     padding: 0;
     margin: 32px 0 1em;
+}
+
+body {
+    padding-bottom: 24px;
 }
