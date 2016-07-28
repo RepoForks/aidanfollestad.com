@@ -1,8 +1,11 @@
+/**
+ * Created by intelWorx on 27/10/2015.
+ */
 (function () {
     'use strict';
 
     console.log('MP3 conversion worker started.');
-    importScripts('lame.min.js');
+    importScripts('../lame.min.js');
 
     var mp3Encoder, maxSamples = 1152, samplesMono, lame, config, dataBuffer;
     var clearBuffer = function () {
@@ -17,9 +20,7 @@
     var init = function (prefConfig) {
         config = prefConfig || {debug: true};
         lame = new lamejs();
-        console.log('Lame: ' + lame);
         mp3Encoder = new lame.Mp3Encoder(1, config.sampleRate || 44100, config.bitRate || 123);
-        console.log('MP3 encoder: ' + mp3Encoder);
         clearBuffer();
     };
 
