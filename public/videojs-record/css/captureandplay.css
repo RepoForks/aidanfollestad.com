@@ -28,3 +28,8 @@ nav .brand-logo {
     padding-left: 24px;
     font-size: 1.8rem;
 }
+
+hr {
+    margin-top: 16px;
+    color: #eee;
+}
