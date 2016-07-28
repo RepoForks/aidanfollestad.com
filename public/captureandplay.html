@@ -29,8 +29,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
 
-    <!-- Internal -->
+    <!-- Other -->
     <link href="/videojs-record/css/captureandplay.css" rel="stylesheet">
+    <script src="/videojs-record/FileSaver.min.js"></script>
 
 </head>
 <body>
@@ -78,6 +79,26 @@
 <script>
 
     var wavesurfer;
+
+    function saveFile(obj, name) {
+        if (obj instanceof Blob) {
+            saveAs(obj, name);
+        } else if (obj.video) {
+            if (obj.video instanceof Blob) {
+                saveAs(obj.video, name);
+            } else {
+                alert('Video isn\'t a blob?');
+            }
+        } else if (obj.audio) {
+            if (obj.audio instanceof Blob) {
+                saveAs(obj.audio, name);
+            } else {
+                alert('Audio isn\'t a blob?');
+            }
+        } else {
+            alert('Didn\'t get a blob, or audio/video objects.');
+        }
+    }
 
     $(document).ready(function () {
 
@@ -127,6 +148,7 @@
             // the blob object contains the recorded data that
             // can be downloaded by the user, stored on server etc.
             console.log('finished recording: ', videoPlayer.recordedData);
+            saveFile(videoPlayer.recordedData, 'test_video.webm');
         });
 
         var defaultAudioWidth = 600;
@@ -178,6 +200,7 @@
             // the blob object contains the recorded data that
             // can be downloaded by the user, stored on server etc.
             console.log('finished recording: ', audioPlayer.recordedData);
+            saveFile(audioPlayer.recordedData, 'test_audio.wav');
         });
 
         var imagePlayer = videojs("myImage",
@@ -206,6 +229,7 @@
             // the blob object contains the image data that
             // can be downloaded by the user, stored on server etc.
             console.log('snapshot ready: ', imagePlayer.recordedData);
+            saveFile(imagePlayer.recordedData, 'test_image.png');
         });
 
         wavesurfer = WaveSurfer.create({
