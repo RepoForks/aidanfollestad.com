@@ -17,6 +17,7 @@
     <!-- VideoJS.Record and Related Plugins -->
     <script src="/videojs-record/videojs.record.min.js"></script>
     <script src="/videojs-record/videojs.wavesurfer.js"></script>
+    <script src="/videojs-record/videojs.record.lamejs.min.js"></script>
     <link href="/videojs-record/css/videojs.record.min.css" rel="stylesheet">
 
     <!-- RecordRTC -->
@@ -181,7 +182,9 @@
                             audio: true,
                             video: false,
                             maxLength: 20,
-                            debug: true
+                            debug: true,
+                            audioEngine: "lamejs",
+                            audioWorkerURL: "/js/lamejs-worker.js"
                         }
                     }
                 });
@@ -200,7 +203,7 @@
             // the blob object contains the recorded data that
             // can be downloaded by the user, stored on server etc.
             console.log('finished recording: ', audioPlayer.recordedData);
-            saveFile(audioPlayer.recordedData, 'test_audio.wav');
+            saveFile(audioPlayer.recordedData, 'test_audio.mp3');
         });
 
         var imagePlayer = videojs("myImage",
