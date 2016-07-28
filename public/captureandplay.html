@@ -229,7 +229,8 @@
             // the blob object contains the image data that
             // can be downloaded by the user, stored on server etc.
             console.log('snapshot ready: ', imagePlayer.recordedData);
-            saveFile(imagePlayer.recordedData, 'test_image.png');
+//            saveFile(imagePlayer.recordedData, 'test_image.png');
+            window.open(imagePlayer.recordedData, '_blank');
         });
 
         wavesurfer = WaveSurfer.create({
