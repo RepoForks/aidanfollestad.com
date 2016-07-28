@@ -16,16 +16,23 @@
     <link href="/videojs-record/css/videojs.record.min.css" rel="stylesheet">
     <link href="/videojs-record/css/captureandplay.css" rel="stylesheet">
 
-    <style>
-        /* change player background color */
-        #myVideo {
-            background-color: #E8E884;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
 </head>
 <body>
 
-<video id="myVideo" class="video-js vjs-default-skin"></video>
+<nav>
+    <div class="nav-wrapper blue">
+        <a href="#" class="brand-logo">Capture and Playback Tests</a>
+    </div>
+</nav>
+
+<div id="body-content">
+
+    <video id="myVideo" class="video-js vjs-default-skin"></video>
+
+</div>
 
 <script>
     var player = videojs("myVideo",

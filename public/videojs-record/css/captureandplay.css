@@ -10,3 +10,16 @@
 .vjs-using-native-controls .vjs-control-bar {
     display: flex !important;
 }
+
+#myVideo {
+    background-color: #000;
+}
+
+html, body {
+    margin: 0;
+    body: 0;
+}
+
+#body-content {
+    padding: 16px 24px;
+}
