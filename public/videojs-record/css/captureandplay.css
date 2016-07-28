@@ -30,6 +30,10 @@ nav .brand-logo {
 }
 
 hr {
-    margin-top: 16px;
-    color: #F5F5F5;
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
 }
