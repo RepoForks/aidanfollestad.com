@@ -23,3 +23,8 @@ html, body {
 #body-content {
     padding: 16px 24px;
 }
+
+.brand-logo {
+    padding-left: 24px;
+    font-size: 1.8rem;
+}
