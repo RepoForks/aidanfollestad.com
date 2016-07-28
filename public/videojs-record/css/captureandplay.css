@@ -46,7 +46,7 @@ body {
     padding-bottom: 24px;
 }
 
-.button {
+button {
     background-color: #2196F3; /* Green */
     border: none;
     color: white;
