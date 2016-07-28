@@ -59,8 +59,10 @@
     <hr/>
 
     <h5>Audio Playback</h5>
-    <div id="waveform" style="max-width: 50%"></div>
-    <button style="margin-top: 24px" class="btn waves-effect waves-light light-blue" onclick="wavesurfer.playPause()">Play/Pause</button>
+    <div id="waveform"></div>
+    <button style="margin-top: 24px" class="btn waves-effect waves-light light-blue" onclick="wavesurfer.playPause()">
+        Play/Pause
+    </button>
 
     <hr/>
 
@@ -137,6 +139,7 @@
         var waveform = $('#waveform');
         waveform.attr('width', defaultAudioWidth);
         waveform.attr('height', defaultAudioHeight);
+        waveform.attr('style', 'max-width: ' + defaultAudioWidth + 'px');
 
         var audioPlayer = videojs("myAudio",
                 {
