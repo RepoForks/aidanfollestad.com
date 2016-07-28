@@ -60,6 +60,7 @@
 
     <h5>Audio Playback</h5>
     <div id="waveform"></div>
+    <button onclick="wavesurfer.playPause()">Play/Pause</button>
 
     <hr/>
 
@@ -204,7 +205,8 @@
         var wavesurfer = WaveSurfer.create({
             container: '#waveform',
             waveColor: 'violet',
-            progressColor: 'purple'
+            progressColor: 'purple',
+            maxCanvasWidth: defaultAudioWidth
         });
         wavesurfer.load('https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav');
     });
