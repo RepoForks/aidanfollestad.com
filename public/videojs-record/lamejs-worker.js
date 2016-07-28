@@ -16,7 +16,6 @@
         dataBuffer.push(new Int8Array(mp3Buf));
     };
 
-
     var init = function (prefConfig) {
         config = prefConfig || {debug: true};
         lame = new lamejs();
