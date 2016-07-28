@@ -11,7 +11,7 @@
     <!-- WaveSurfer -->
     <script src="//collab-project.github.io/videojs-wavesurfer/dist/wavesurfer.min.js"></script>
     <script src="//collab-project.github.io/videojs-wavesurfer/dist/wavesurfer.microphone.min.js"></script>
-    
+
     <!-- VideoJS.Record and Related Plugins -->
     <script src="/videojs-record/videojs.record.min.js"></script>
     <script src="/videojs-record/videojs.wavesurfer.js"></script>
@@ -42,12 +42,17 @@
 <div id="body-content">
 
     <h3>Video Capture</h3>
-
     <video id="myVideo" class="video-js vjs-default-skin"></video>
 
-    <h3>Audio Capture</h3>
+    <hr/>
 
+    <h3>Audio Capture</h3>
     <audio id="myAudio" class="video-js vjs-default-skin"></audio>
+
+    <hr/>
+
+    <h3>Image Capture</h3>
+    <video id="myImage" class="video-js vjs-default-skin"></video>
 
 </div>
 
@@ -128,6 +133,37 @@
         // the blob object contains the recorded data that
         // can be downloaded by the user, stored on server etc.
         console.log('finished recording: ', audioPlayer.recordedData);
+    });
+</script>
+
+<!-- SETUP IMAGE CAPTURE -->
+<script>
+    var imagePlayer = videojs("myImage",
+            {
+                controls: true,
+                width: 320,
+                height: 240,
+                controlBar: {
+                    volumeMenuButton: false,
+                    fullscreenToggle: false
+                },
+                plugins: {
+                    record: {
+                        image: true,
+                        debug: true
+                    }
+                }
+            });
+    // error handling
+    imagePlayer.on('deviceError', function () {
+        console.warn('device error:', imagePlayer.deviceErrorCode);
+    });
+
+    // snapshot is available
+    imagePlayer.on('finishRecord', function () {
+        // the blob object contains the image data that
+        // can be downloaded by the user, stored on server etc.
+        console.log('snapshot ready: ', imagePlayer.recordedData);
     });
 </script>
 
