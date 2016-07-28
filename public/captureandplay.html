@@ -56,6 +56,19 @@
     <h5>Image Capture</h5>
     <video id="myImage" class="video-js vjs-default-skin"></video>
 
+    <hr/>
+
+    <h5>Audio Playback</h5>
+    <div id="waveform"></div>
+
+    <hr/>
+
+    <h5>Video Playback</h5>
+    <video width="320" height="240" controls>
+        <source src="https://s3.amazonaws.com/prod-extempore-expertfiles/001f0346-a03f-4a18-bb3a-d1f97eec12a4.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
 </div>
 
 <script>
@@ -178,6 +191,13 @@
             // can be downloaded by the user, stored on server etc.
             console.log('snapshot ready: ', imagePlayer.recordedData);
         });
+
+        var wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'violet',
+            progressColor: 'purple'
+        });
+        wavesurfer.load('https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav');
     });
 </script>
 
