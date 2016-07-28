@@ -2,22 +2,28 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Audio/Video Example - Record Plugin for Video.js</title>
+    <title>Capture and Playback Tests</title>
 
+    <!-- Video.js -->
     <link href="//vjs.zencdn.net/5.8/video-js.min.css" rel="stylesheet">
     <script src="//vjs.zencdn.net/5.8/video.min.js"></script>
 
-    <script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
+    <!-- WaveSurfer -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.52/wavesurfer.min.js"></script>
-    <script src="/videojs-record/videojs.record.min.js"></script>
-    <script src="//cdn.webrtc-experiment.com/RecordRTC.js"></script>
-    <script src="/videojs-record/videojs.wavesurfer.js"></script>
 
+    <!-- VideoJS.Record and Related Plugins -->
+    <script src="/videojs-record/videojs.record.min.js"></script>
+    <script src="/videojs-record/videojs.wavesurfer.js"></script>
     <link href="/videojs-record/css/videojs.record.min.css" rel="stylesheet">
 
+    <!-- RecordRTC -->
+    <script src="//cdn.webrtc-experiment.com/RecordRTC.js"></script>
+
+    <!-- Materialize -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
 
+    <!-- Internal -->
     <link href="/videojs-record/css/captureandplay.css" rel="stylesheet">
 
 </head>
@@ -31,12 +37,19 @@
 
 <div id="body-content">
 
+    <h3>Video Capture</h3>
+
     <video id="myVideo" class="video-js vjs-default-skin"></video>
+
+    <h3>Audio Capture</h3>
+
+    <audio id="myAudio" class="video-js vjs-default-skin"></audio>
 
 </div>
 
+<!-- SETUP VIDEO CAPTURE -->
 <script>
-    var player = videojs("myVideo",
+    var videoPlayer = videojs("myVideo",
             {
                 controls: true,
                 width: 320,
@@ -52,23 +65,68 @@
             });
 
     // error handling
-    player.on('deviceError', function () {
-        console.log('device error:', player.deviceErrorCode);
+    videoPlayer.on('deviceError', function () {
+        console.log('device error:', videoPlayer.deviceErrorCode);
     });
-    player.on('error', function (error) {
+    videoPlayer.on('error', function (error) {
         console.log('error:', error);
     });
 
     // user clicked the record button and started recording
-    player.on('startRecord', function () {
+    videoPlayer.on('startRecord', function () {
         console.log('started recording!');
     });
 
     // user completed recording and stream is available
-    player.on('finishRecord', function () {
+    videoPlayer.on('finishRecord', function () {
         // the blob object contains the recorded data that
         // can be downloaded by the user, stored on server etc.
-        console.log('finished recording: ', player.recordedData);
+        console.log('finished recording: ', videoPlayer.recordedData);
+    });
+</script>
+
+<!-- SETUP AUDIO-ONLY CAPTURE -->
+<script>
+    var audioPlayer = videojs("myAudio",
+            {
+                controls: true,
+                width: 600,
+                height: 300,
+                plugins: {
+                    wavesurfer: {
+                        src: "live",
+                        waveColor: "black",
+                        progressColor: "#2E732D",
+                        cursorWidth: 1,
+                        msDisplayMax: 20,
+                        hideScrollbar: true
+                    },
+                    record: {
+                        audio: true,
+                        video: false,
+                        maxLength: 20,
+                        debug: true
+                    }
+                }
+            });
+    // error handling
+    audioPlayer.on('deviceError', function()
+    {
+        console.log('device error:', audioPlayer.deviceErrorCode);
+    });
+
+    // user clicked the record button and started recording
+    audioPlayer.on('startRecord', function()
+    {
+        console.log('started recording!');
+    });
+
+    // user completed recording and stream is available
+    audioPlayer.on('finishRecord', function()
+    {
+        // the blob object contains the recorded data that
+        // can be downloaded by the user, stored on server etc.
+        console.log('finished recording: ', audioPlayer.recordedData);
     });
 </script>
 
