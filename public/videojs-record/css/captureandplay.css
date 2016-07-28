@@ -17,14 +17,14 @@
 
 html, body {
     margin: 0;
-    body: 0;
+    padding: 0;
 }
 
 #body-content {
     padding: 16px 24px;
 }
 
-.brand-logo {
+nav .brand-logo {
     padding-left: 24px;
     font-size: 1.8rem;
 }
