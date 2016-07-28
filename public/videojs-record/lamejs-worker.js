@@ -17,7 +17,9 @@
     var init = function (prefConfig) {
         config = prefConfig || {debug: true};
         lame = new lamejs();
+        console.log('Lame: ' + lame);
         mp3Encoder = new lame.Mp3Encoder(1, config.sampleRate || 44100, config.bitRate || 123);
+        console.log('MP3 encoder: ' + mp3Encoder);
         clearBuffer();
     };
 
