@@ -150,6 +150,7 @@
     var audioPlayer;
 
     function playAudio(selector, url, showControls) {
+        console.log('Playing audio');
         if (audioPlayer) {
             audioPlayer.stop();
             audioPlayer.destroy();
@@ -174,6 +175,7 @@
         audioMediaRecorder = new MediaStreamRecorder(stream);
         audioMediaRecorder.mimeType = 'audio/wav';
         audioMediaRecorder.ondataavailable = function (blob) {
+            console.log('Audio data available');
             // POST/PUT "Blob" using FormData/XHR2
             var blobUrl = URL.createObjectURL(blob);
             playAudio('#audioView', blobUrl, true);
@@ -196,9 +198,11 @@
         var btn = $('#beginAudioCaptureBtn');
         if (isAudioRecording) {
             btn.text('Begin Capture');
+            console.log('Stopping playback');
             audioMediaRecorder.stop();
         } else {
             btn.text('End Capture');
+            console.log('Starting playback');
             audioMediaRecorder.start();
         }
         isAudioRecording = !isAudioRecording;
@@ -206,6 +210,7 @@
 
     function toggleAudioPlayback() {
         var btn = $('#audioPlaybackBtn');
+        console.log('Toggling audio playback');
         audioPlayer.playPause();
         if (isAudioPlaying) {
             btn.text('Play Audio');
