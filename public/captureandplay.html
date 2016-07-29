@@ -173,7 +173,7 @@
 
     function onAudioSuccess(stream) {
         audioMediaRecorder = new MediaStreamRecorder(stream);
-        audioMediaRecorder.mimeType = 'audio/wav';
+        audioMediaRecorder.mimeType = 'audio/webm';
         audioMediaRecorder.ondataavailable = function (blob) {
             console.log('Audio data available');
             // POST/PUT "Blob" using FormData/XHR2
