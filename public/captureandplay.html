@@ -102,7 +102,7 @@
     }
 
     function startListeningVideo() {
-        $('#startListeningVideo').prop('disabled', true)
+        $('#startVideoCameraBtn').prop('disabled', true);
         $('#beginCaptureBtn').prop('disabled', false);
         navigator.getUserMedia(videoMediaConstraints, onVideoSuccess, onVideoError);
     }
