@@ -16,7 +16,23 @@ nav .brand-logo {
     font-size: 1.8rem;
 }
 
+button {
+    width: 300px;
+}
+
+#audioView {
+    max-width: 500px;
+}
+
 @media only screen and (max-width: 600px) {
+    button {
+        width: 100%;
+    }
+
+    #audioView {
+        max-width: 100%;
+    }
+
     nav .brand-logo {
         padding-left: 0;
     }

@@ -33,12 +33,12 @@
 <div id="body-content">
 
     <h5>Video Capture</h5>
-    <button id="startVideoCameraBtn" style="margin-top: 24px; width: 300px"
+    <button id="startVideoCameraBtn" style="margin-top: 24px"
             class="btn waves-effect waves-light light-blue"
             onclick="startListeningVideo()">Start Video Camera
     </button>
     <br/>
-    <button id="beginCaptureBtn" style="margin-top: 12px; width: 300px" class="btn waves-effect waves-light light-blue"
+    <button id="beginCaptureBtn" style="margin-top: 12px" class="btn waves-effect waves-light light-blue"
             onclick="toggleVideoCapture()" disabled>Begin Capture
     </button>
     <br/>
@@ -46,14 +46,28 @@
 
     <hr/>
 
-    <!--<h5>Audio Capture</h5>-->
-    <!--<audio id="myAudio" class="video-js vjs-default-skin"></audio>-->
-
-    <!--<hr/>-->
+    <h5>Audio Capture</h5>
+    <button id="startMicrophoneBtn" style="margin-top: 24px"
+            class="btn waves-effect waves-light light-blue"
+            onclick="startListeningAudio()">Start Microphone
+    </button>
+    <br/>
+    <button id="beginAudioCaptureBtn" style="margin-top: 12px" class="btn waves-effect waves-light light-blue"
+            onclick="toggleAudioCapture()" disabled>Begin Capture
+    </button>
+    <br/>
+    <div id="audioView" style="display: none; margin-top: 24px"></div>
+    <br/>
+    <div id="audioPlaybackViews" style="display: none">
+        <button id="audioPlaybackBtn" style="margin-top: 12px" class="btn waves-effect waves-light light-blue"
+                onclick="toggleAudioPlayback()">Play Audio
+        </button>
+    </div>
+    <hr/>
 
     <h5>Audio Playback</h5>
     <div id="waveform"></div>
-    <button style="margin-top: 24px" class="btn waves-effect waves-light light-blue" onclick="wavesurfer.playPause()">
+    <button style="margin-top: 24px" class="btn waves-effect waves-light light-blue">
         Play/Pause
     </button>
 
@@ -126,54 +140,84 @@
 
 </script>
 
-<!-- OTHER -->
+<!-- AUDIO CAPTURE -->
 <script>
 
-    var wavesurfer;
+    var audioMediaRecorder;
+    var audioMediaConstraints = {
+        audio: true
+    };
+    var isAudioRecording = false;
+    var isAudioPlaying = false;
+    var audioPlayer;
 
-    //    function saveFile(obj, name) {
-    //        if (obj instanceof Blob) {
-    //            saveAs(obj, name);
-    //        } else if (obj.video) {
-    //            if (obj.video instanceof Blob) {
-    //                saveAs(obj.video, name);
-    //            } else {
-    //                alert('Video isn\'t a blob?');
-    //            }
-    //        } else if (obj.audio) {
-    //            if (obj.audio instanceof Blob) {
-    //                saveAs(obj.audio, name);
-    //            } else {
-    //                alert('Audio isn\'t a blob?');
-    //            }
-    //        } else {
-    //            alert('Didn\'t get a blob, or audio/video objects.');
-    //        }
-    //    }
-
-    function playAudio(selector, url) {
-        if (wavesurfer) {
-            wavesurfer.stop();
-            wavesurfer.destroy();
+    function playAudio(selector, url, showControls) {
+        if (audioPlayer) {
+            audioPlayer.stop();
+            audioPlayer.destroy();
         }
-        wavesurfer = WaveSurfer.create({
+        audioPlayer = WaveSurfer.create({
             container: selector,
             waveColor: 'black',
             progressColor: 'blue'
         });
         // 'https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav'
-        wavesurfer.load(url);
+        audioPlayer.load(url);
+        if (showControls) {
+            var btn = $('#audioPlaybackViews');
+            btn.text('Play Audio');
+            btn.show();
+        } else {
+            $('#audioPlaybackViews').hide();
+        }
     }
 
-    $(document).ready(function () {
-//        var contentWidth = $('#body-content').width();
-//        var defaultVideoWidth = 320;
-//        var defaultVideoHeight = 240;
-//        if (defaultVideoWidth > contentWidth) {
-//            defaultVideoWidth = contentWidth;
-//            defaultVideoHeight = contentWidth / (defaultVideoWidth / defaultVideoHeight);
-//        }
-    });
+    function onAudioSuccess(stream) {
+        audioMediaRecorder = new MediaStreamRecorder(stream);
+        audioMediaRecorder.mimeType = 'audio/wav';
+        audioMediaRecorder.ondataavailable = function (blob) {
+            // POST/PUT "Blob" using FormData/XHR2
+            var blobUrl = URL.createObjectURL(blob);
+            playAudio('#audioView', blobUrl, true);
+        };
+
+        var localUrl = window.URL.createObjectURL(stream);
+        playVideo('#audioView', localUrl, false);
+        $('#audioView').show();
+    }
+
+    function onAudioError(e) {
+        console.error('Audio error: ', e);
+    }
+
+    function startListeningAudio() {
+        $('#startMicrophoneBtn').prop('disabled', true);
+        $('#beginAudioCaptureBtn').prop('disabled', false);
+        navigator.getUserMedia(audioMediaConstraints, onAudioSuccess, onAudioError);
+    }
+
+    function toggleAudioCapture() {
+        var btn = $('#beginAudioCaptureBtn');
+        if (isAudioRecording) {
+            btn.text('Begin Capture');
+            audioMediaRecorder.stop();
+        } else {
+            btn.text('End Capture');
+            audioMediaRecorder.start();
+        }
+        isAudioRecording = !isAudioRecording;
+    }
+
+    function toggleAudioPlayback() {
+        var btn = $('#audioPlaybackBtn');
+        audioPlayer.playPause();
+        if (isAudioPlaying) {
+            btn.text('Play Audio');
+        } else {
+            btn.text('Pause Audio');
+        }
+        isAudioPlaying = !isAudioPlaying;
+    }
 
 </script>
 
