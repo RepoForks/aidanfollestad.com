@@ -102,6 +102,8 @@
     }
 
     function startListeningVideo() {
+        $('#startListeningVideo').prop('disabled', true)
+        $('#beginCaptureBtn').prop('disabled', false);
         navigator.getUserMedia(videoMediaConstraints, onVideoSuccess, onVideoError);
     }
 
@@ -110,7 +112,6 @@
         if (isVideoRecording) {
             btn.text('Begin Capture');
             videoMediaRecorder.stop();
-
         } else {
             btn.text('End Capture');
             videoMediaRecorder.start();
