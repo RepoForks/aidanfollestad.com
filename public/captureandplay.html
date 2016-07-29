@@ -42,14 +42,14 @@
             onclick="toggleVideoCapture()" disabled>Begin Capture
     </button>
     <br/>
-    <video id="videoView" style="display: none" autoplay></video>
+    <video id="videoView" style="display: none; margin-top: 24px" autoplay></video>
 
     <hr/>
 
-    <h5>Audio Capture</h5>
+    <!--<h5>Audio Capture</h5>-->
     <!--<audio id="myAudio" class="video-js vjs-default-skin"></audio>-->
 
-    <hr/>
+    <!--<hr/>-->
 
     <h5>Audio Playback</h5>
     <div id="waveform"></div>
@@ -106,9 +106,13 @@
     }
 
     function toggleVideoCapture() {
+        var btn = $('#beginCaptureBtn');
         if (isVideoRecording) {
+            btn.text('Begin Capture');
             videoMediaRecorder.stop();
+
         } else {
+            btn.text('End Capture');
             videoMediaRecorder.start();
         }
         isVideoRecording = !isVideoRecording;
