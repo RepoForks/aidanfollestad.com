@@ -78,9 +78,14 @@
     };
     var isVideoRecording = false;
 
-    function playVideo(selector, url) {
+    function playVideo(selector, url, showControls) {
         var video = $(selector)[0];
         video.src = url;
+        if (!showControls && video.hasAttribute("controls")) {
+            video.removeAttribute("controls")
+        } else if (showControls) {
+            video.setAttribute("controls", "controls")
+        }
     }
 
     function onVideoSuccess(stream) {
@@ -89,11 +94,11 @@
         videoMediaRecorder.ondataavailable = function (blob) {
             // POST/PUT "Blob" using FormData/XHR2
             var blobUrl = URL.createObjectURL(blob);
-            playVideo('#videoView', blobUrl);
+            playVideo('#videoView', blobUrl, true);
         };
 
         var localUrl = window.URL.createObjectURL(stream);
-        playVideo('#videoView', localUrl);
+        playVideo('#videoView', localUrl, false);
         $('#videoView').show();
     }
 
