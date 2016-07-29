@@ -6,33 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1E88E5">
 
-    <!-- Video.js -->
-    <link href="//vjs.zencdn.net/5.8/video-js.min.css" rel="stylesheet">
-    <script src="//vjs.zencdn.net/5.8/video.min.js"></script>
-
     <!-- WaveSurfer -->
-    <script src="//collab-project.github.io/videojs-wavesurfer/dist/wavesurfer.min.js"></script>
-    <script src="//collab-project.github.io/videojs-wavesurfer/dist/wavesurfer.microphone.min.js"></script>
-
-    <!-- VideoJS.Record and Related Plugins -->
-    <script src="/videojs-record/videojs.record.min.js"></script>
-    <script src="/videojs-record/videojs.wavesurfer.js"></script>
-    <script src="/videojs-record/videojs.record.lamejs.min.js"></script>
-    <link href="/videojs-record/css/videojs.record.min.css" rel="stylesheet">
-
-    <!-- RecordRTC -->
-    <script src="//cdn.webrtc-experiment.com/RecordRTC.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.52/wavesurfer.min.js"></script>
 
     <!-- jQuery -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     <!-- Materialize -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
 
-    <!-- Other -->
-    <link href="/videojs-record/css/captureandplay.css" rel="stylesheet">
-    <script src="/videojs-record/FileSaver.min.js"></script>
+    <!-- Internal -->
+    <link href="/css/captureandplay.css" rel="stylesheet">
+    <script src="/js/FileSaver.min.js"></script>
+    <script src="/js/MediaStreamRecorder.min.js"></script>
 
 </head>
 <body>
@@ -46,17 +33,21 @@
 <div id="body-content">
 
     <h5>Video Capture</h5>
-    <video id="myVideo" class="video-js vjs-default-skin"></video>
+    <button id="startVideoCameraBtn" style="margin-top: 24px; width: 300px"
+            class="btn waves-effect waves-light light-blue"
+            onclick="startListeningVideo()">Start Video Camera
+    </button>
+    <br/>
+    <button id="beginCaptureBtn" style="margin-top: 12px; width: 300px" class="btn waves-effect waves-light light-blue"
+            onclick="toggleVideoCapture()" disabled>Begin Capture
+    </button>
+    <br/>
+    <video id="videoView" style="display: none" autoplay></video>
 
     <hr/>
 
     <h5>Audio Capture</h5>
-    <audio id="myAudio" class="video-js vjs-default-skin"></audio>
-
-    <hr/>
-
-    <h5>Image Capture</h5>
-    <video id="myImage" class="video-js vjs-default-skin"></video>
+    <!--<audio id="myAudio" class="video-js vjs-default-skin"></audio>-->
 
     <hr/>
 
@@ -77,177 +68,103 @@
 
 </div>
 
+<!-- VIDEO CAPTURE -->
+<script>
+
+    var videoMediaRecorder;
+    var videoMediaConstraints = {
+        audio: true,
+        video: true  // if firefox or chrome
+    };
+    var isVideoRecording = false;
+
+    function playVideo(selector, url) {
+        var video = $(selector)[0];
+        video.src = url;
+    }
+
+    function onVideoSuccess(stream) {
+        videoMediaRecorder = new MediaStreamRecorder(stream);
+        videoMediaRecorder.mimeType = 'video/mp4';
+        videoMediaRecorder.ondataavailable = function (blob) {
+            // POST/PUT "Blob" using FormData/XHR2
+            var blobUrl = URL.createObjectURL(blob);
+            playVideo('#videoView', blobUrl);
+        };
+
+        var localUrl = window.URL.createObjectURL(stream);
+        playVideo('#videoView', localUrl);
+        $('#videoView').show();
+    }
+
+    function onVideoError(e) {
+        console.error('Video error: ', e);
+    }
+
+    function startListeningVideo() {
+        navigator.getUserMedia(videoMediaConstraints, onVideoSuccess, onVideoError);
+    }
+
+    function toggleVideoCapture() {
+        if (isVideoRecording) {
+            videoMediaRecorder.stop();
+        } else {
+            videoMediaRecorder.start();
+        }
+        isVideoRecording = !isVideoRecording;
+    }
+
+</script>
+
+<!-- OTHER -->
 <script>
 
     var wavesurfer;
 
-    function saveFile(obj, name) {
-        if (obj instanceof Blob) {
-            saveAs(obj, name);
-        } else if (obj.video) {
-            if (obj.video instanceof Blob) {
-                saveAs(obj.video, name);
-            } else {
-                alert('Video isn\'t a blob?');
-            }
-        } else if (obj.audio) {
-            if (obj.audio instanceof Blob) {
-                saveAs(obj.audio, name);
-            } else {
-                alert('Audio isn\'t a blob?');
-            }
-        } else {
-            alert('Didn\'t get a blob, or audio/video objects.');
+    //    function saveFile(obj, name) {
+    //        if (obj instanceof Blob) {
+    //            saveAs(obj, name);
+    //        } else if (obj.video) {
+    //            if (obj.video instanceof Blob) {
+    //                saveAs(obj.video, name);
+    //            } else {
+    //                alert('Video isn\'t a blob?');
+    //            }
+    //        } else if (obj.audio) {
+    //            if (obj.audio instanceof Blob) {
+    //                saveAs(obj.audio, name);
+    //            } else {
+    //                alert('Audio isn\'t a blob?');
+    //            }
+    //        } else {
+    //            alert('Didn\'t get a blob, or audio/video objects.');
+    //        }
+    //    }
+
+    function playAudio(selector, url) {
+        if (wavesurfer) {
+            wavesurfer.stop();
+            wavesurfer.destroy();
         }
+        wavesurfer = WaveSurfer.create({
+            container: selector,
+            waveColor: 'black',
+            progressColor: 'blue'
+        });
+        // 'https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav'
+        wavesurfer.load(url);
     }
 
     $(document).ready(function () {
-
-        var contentWidth = $('#body-content').width();
-
-        var defaultVideoWidth = 320;
-        var defaultVideoHeight = 240;
-        if (defaultVideoWidth > contentWidth) {
-            defaultVideoWidth = contentWidth;
-            defaultVideoHeight = contentWidth / (defaultVideoWidth / defaultVideoHeight);
-        }
-
-        var videoPlayback = $('#videoPlayback');
-        videoPlayback.attr('width', defaultVideoWidth);
-        videoPlayback.attr('height', defaultVideoHeight);
-
-        var videoPlayer = videojs("myVideo",
-                {
-                    controls: true,
-                    width: defaultVideoWidth,
-                    height: defaultVideoHeight,
-                    plugins: {
-                        record: {
-                            audio: true,
-                            video: true,
-                            maxLength: 10,
-                            debug: true
-                        }
-                    }
-                });
-
-        // error handling
-        videoPlayer.on('deviceError', function () {
-            console.log('device error:', videoPlayer.deviceErrorCode);
-        });
-        videoPlayer.on('error', function (error) {
-            console.log('error:', error);
-        });
-
-        // user clicked the record button and started recording
-        videoPlayer.on('startRecord', function () {
-            console.log('started recording!');
-        });
-
-        // user completed recording and stream is available
-        videoPlayer.on('finishRecord', function () {
-            // the blob object contains the recorded data that
-            // can be downloaded by the user, stored on server etc.
-            console.log('finished recording: ', videoPlayer.recordedData);
-            saveFile(videoPlayer.recordedData, 'test_video.webm');
-        });
-
-        var defaultAudioWidth = 600;
-        var defaultAudioHeight = 300;
-        if (defaultAudioWidth > contentWidth) {
-            defaultAudioWidth = contentWidth;
-            defaultAudioHeight = contentWidth / (defaultAudioWidth / defaultAudioHeight);
-        }
-
-        var waveform = $('#waveform');
-        waveform.attr('width', defaultAudioWidth);
-        waveform.attr('height', defaultAudioHeight);
-        waveform.attr('style', 'max-width: ' + defaultAudioWidth + 'px');
-
-        var audioPlayer = videojs("myAudio",
-                {
-                    controls: true,
-                    width: defaultAudioWidth,
-                    height: defaultAudioHeight,
-                    plugins: {
-                        wavesurfer: {
-                            src: "live",
-                            waveColor: "black",
-                            progressColor: "blue",
-                            cursorWidth: 1,
-                            msDisplayMax: 20,
-                            hideScrollbar: true
-                        },
-                        record: {
-                            audio: true,
-                            video: false,
-                            maxLength: 20,
-                            debug: true,
-                            audioEngine: "lamejs",
-                            audioWorkerURL: "/videojs-record/lamejs-worker.js"
-                        }
-                    }
-                });
-        // error handling
-        audioPlayer.on('deviceError', function () {
-            console.log('device error:', audioPlayer.deviceErrorCode);
-        });
-
-        // user clicked the record button and started recording
-        audioPlayer.on('startRecord', function () {
-            console.log('started recording!');
-        });
-
-        // user completed recording and stream is available
-        audioPlayer.on('finishRecord', function () {
-            // the blob object contains the recorded data that
-            // can be downloaded by the user, stored on server etc.
-            console.log('finished recording: ', audioPlayer.recordedData);
-            saveFile(audioPlayer.recordedData, 'test_audio.mp3');
-        });
-
-        var imagePlayer = videojs("myImage",
-                {
-                    controls: true,
-                    width: defaultVideoWidth,
-                    height: defaultVideoHeight,
-                    controlBar: {
-                        volumeMenuButton: false,
-                        fullscreenToggle: false
-                    },
-                    plugins: {
-                        record: {
-                            image: true,
-                            debug: true
-                        }
-                    }
-                });
-        // error handling
-        imagePlayer.on('deviceError', function () {
-            console.warn('device error:', imagePlayer.deviceErrorCode);
-        });
-
-        // snapshot is available
-        imagePlayer.on('finishRecord', function () {
-            // the blob object contains the image data that
-            // can be downloaded by the user, stored on server etc.
-            console.log('snapshot ready: ', imagePlayer.recordedData);
-//            saveFile(imagePlayer.recordedData, 'test_image.png');
-            window.open(imagePlayer.recordedData, '_blank');
-        });
-
-        wavesurfer = WaveSurfer.create({
-            container: '#waveform',
-            waveColor: 'black',
-            progressColor: 'blue',
-            maxCanvasWidth: defaultAudioWidth
-        });
-        wavesurfer.load('https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav');
-
-//        setTimeout(function () {
-//            $('.vjs-device-button').click();
-//        }, 250);
+//        var contentWidth = $('#body-content').width();
+//        var defaultVideoWidth = 320;
+//        var defaultVideoHeight = 240;
+//        if (defaultVideoWidth > contentWidth) {
+//            defaultVideoWidth = contentWidth;
+//            defaultVideoHeight = contentWidth / (defaultVideoWidth / defaultVideoHeight);
+//        }
     });
+
 </script>
 
 </body>
