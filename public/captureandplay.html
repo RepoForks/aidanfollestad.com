@@ -58,11 +58,9 @@
     <br/>
     <div id="audioView" style="display: none; margin-top: 24px"></div>
     <br/>
-    <div id="audioPlaybackViews" style="display: none">
-        <button id="audioPlaybackBtn" style="margin-top: 12px" class="btn waves-effect waves-light light-blue"
-                onclick="toggleAudioPlayback()">Play Audio
-        </button>
-    </div>
+    <button id="audioPlaybackBtn" style="margin-top: 12px" class="btn waves-effect waves-light light-blue"
+            onclick="toggleAudioPlayback()">Play Audio
+    </button>
     <hr/>
 
     <h5>Audio Playback</h5>
@@ -164,11 +162,11 @@
         // 'https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav'
         audioPlayer.load(url);
         if (showControls) {
-            var btn = $('#audioPlaybackViews');
+            var btn = $('#audioPlaybackBtn');
             btn.text('Play Audio');
             btn.show();
         } else {
-            $('#audioPlaybackViews').hide();
+            $('#audioPlaybackBtn').hide();
         }
     }
 
@@ -181,9 +179,7 @@
             playAudio('#audioView', blobUrl, true);
         };
 
-        var localUrl = window.URL.createObjectURL(stream);
-        playVideo('#audioView', localUrl, false);
-        $('#audioView').show();
+        $('#audioView').hide();
     }
 
     function onAudioError(e) {
