@@ -92,12 +92,14 @@
     var isVideoRecording = false;
 
     function playVideo(selector, url, showControls) {
-        var video = $(selector)[0];
-        video.src = url;
-        if (!showControls && video.hasAttribute("controls")) {
-            video.removeAttribute("controls")
+        var video = $(selector);
+        video.attr('src', url);
+        if (!showControls && video[0].hasAttribute("controls")) {
+            video.prop('controls', false);
+            video.prop('muted', true);
         } else if (showControls) {
-            video.setAttribute("controls", "controls")
+            video.prop('controls', true);
+            video.prop('muted', false);
         }
     }
 
