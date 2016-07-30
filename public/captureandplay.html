@@ -58,7 +58,8 @@
     <br/>
     <div id="audioView" style="display: none; margin-top: 24px"></div>
     <br/>
-    <button id="audioPlaybackBtn" style="margin-top: 12px; display: none" class="btn waves-effect waves-light light-blue"
+    <button id="audioPlaybackBtn" style="margin-top: 12px; display: none"
+            class="btn waves-effect waves-light light-blue"
             onclick="toggleAudioPlayback()">Play Audio
     </button>
     <hr/>
@@ -66,7 +67,7 @@
     <h5>Audio Playback</h5>
     <div id="waveform"></div>
     <button style="margin-top: 24px" class="btn waves-effect waves-light light-blue">
-        Play/Pause
+        Play / Pause
     </button>
 
     <hr/>
@@ -141,6 +142,17 @@
 <!-- AUDIO CAPTURE -->
 <script>
 
+    var waveSurfer;
+
+    $(document).ready(function () {
+        waveSurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'black',
+            progressColor: 'blue'
+        });
+        audioPlayer.load('https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav');
+    });
+
     var audioMediaRecorder;
     var audioMediaConstraints = {
         audio: true
@@ -160,7 +172,6 @@
             waveColor: 'black',
             progressColor: 'blue'
         });
-        // 'https://s3.amazonaws.com/prod-extempore-expertfiles/01bef097-91c2-4195-a288-f6877e27ce0c.wav'
         audioPlayer.load(url);
         if (showControls) {
             var btn = $('#audioPlaybackBtn');

@@ -20,7 +20,7 @@ button {
     width: 300px;
 }
 
-#audioView {
+#audioView, #waveform {
     max-width: 500px;
 }
 
@@ -29,7 +29,7 @@ button {
         width: 100%;
     }
 
-    #audioView {
+    #audioView, #waveform {
         max-width: 100%;
     }
 
