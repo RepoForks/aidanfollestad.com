@@ -10,7 +10,7 @@ router.get('/about', function (req, res) {
 });
 
 router.get('/great-dictator', function (req, res) {
-    res.render('greatdictator', {title: 'The Great Dictator\'s Speech'});
+    res.render('greatdictator', {title: 'Great Dictator'});
 });
 
 router.get('/skills', function (req, res) {
