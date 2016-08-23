@@ -53,6 +53,7 @@ function SimpleVideoRecorder(settings) {
             showPreview(stream);
             try {
                 var options = {mimeType: method._settings.contentType};
+                console.log('Using MIME: ' + options.mimeType);
                 method._mediaRecorder = new MediaRecorder(stream, options);
             } catch (e) {
                 method._settings.onerror(e);
