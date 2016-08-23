@@ -8,9 +8,6 @@ function SimpleVideoRecorder(settings) {
     if (!settings) {
         settings = {};
     }
-    if (!settings.contentType) {
-        settings.contentType = 'video/webm';
-    }
     if (!settings.onerror) {
         settings.onerror = function (err) {
             console.log('Error: ' + err)
@@ -43,15 +40,15 @@ function SimpleVideoRecorder(settings) {
 
     navigator.getUserMedia(
         {
-            video: true
+            video: true,
+            audio: true
         },
 
         // Success callback
         function (stream) {
             showPreview(stream);
             try {
-                var options = {mimeType: method._settings.contentType};
-                method._mediaRecorder = new MediaRecorder(stream, options);
+                method._mediaRecorder = new MediaRecorder(stream);
             } catch (e) {
                 method._settings.onerror(e);
                 return;
@@ -65,7 +62,7 @@ function SimpleVideoRecorder(settings) {
 
         // Error callback
         function (err) {
-            method._settings.onerror('getUserMedia failed: ' + err.toString());
+            method._settings.onerror('getUserMedia failed: ' + err);
         }
     );
 }
