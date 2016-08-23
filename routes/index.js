@@ -9,6 +9,10 @@ router.get('/about', function (req, res) {
     res.render('about', {title: 'About', aboutActive: true});
 });
 
+router.get('/great-dictator', function (req, res) {
+    res.render('greatdictator', {title: 'The Great Dictator\'s Speech'});
+});
+
 router.get('/skills', function (req, res) {
     res.render('skills', {title: 'Skills', skillsActive: true});
 });
