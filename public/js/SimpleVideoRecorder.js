@@ -8,9 +8,6 @@ function SimpleVideoRecorder(settings) {
     if (!settings) {
         settings = {};
     }
-    if (!settings.contentType) {
-        settings.contentType = 'video/webm;codecs=vp9';
-    }
     if (!settings.onerror) {
         settings.onerror = function (err) {
             console.log('Error: ' + err)
@@ -51,7 +48,7 @@ function SimpleVideoRecorder(settings) {
         function (stream) {
             showPreview(stream);
             try {
-                var options = {mimeType: method._settings.contentType};
+                var options = {mimeType: 'video/webm'};
                 method._mediaRecorder = new MediaRecorder(stream, options);
             } catch (e) {
                 method._settings.onerror(e);
