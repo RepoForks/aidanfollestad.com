@@ -65,7 +65,7 @@ function SimpleVideoRecorder(settings) {
 
         // Error callback
         function (err) {
-            method._settings.onerror('getUserMedia failed: ' + err);
+            method._settings.onerror('getUserMedia failed: ' + JSON.stringify(err, null, 4));
         }
     );
 }
