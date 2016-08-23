@@ -88,6 +88,7 @@
             var audioURL = window.URL.createObjectURL(blob);
             var player = $('#audioPlayer');
             player.attr('src', audioURL);
+            window.open(audioURL, '_blank');
 //            player[0].load();
         },
         onerror: function (err) {
