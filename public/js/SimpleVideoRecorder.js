@@ -9,7 +9,7 @@ function SimpleVideoRecorder(settings) {
         settings = {};
     }
     if (!settings.contentType) {
-        settings.contentType = 'video/webm, codecs=vp9';
+        settings.contentType = 'video/webm;codecs=vp9';
     }
     if (!settings.onerror) {
         settings.onerror = function (err) {
