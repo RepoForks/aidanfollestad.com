@@ -88,7 +88,7 @@ function setupMediaRecorder() {
         method._chunks.push(e.data);
     };
     recorder.onstop = function (e) {
-        var blob = new Blob(method._chunks, {'type': method._settings.contentType});
+        var blob = new Blob(method._chunks, {'type': 'video/webm'});
         method._chunks = [];
         method._settings.onstopped(blob);
     };
