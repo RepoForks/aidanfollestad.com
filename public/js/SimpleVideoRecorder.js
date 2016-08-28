@@ -100,6 +100,10 @@ function setupMediaRecorder() {
 }
 
 method.start = function () {
+    if(!method._mediaRecorder) {
+        console.log('WARNING: The recorder has not been prepared yet. Wait for onready.');
+        return;
+    }
     setupMediaRecorder();
     method._mediaRecorder.start();
     console.log(method._mediaRecorder.state);
