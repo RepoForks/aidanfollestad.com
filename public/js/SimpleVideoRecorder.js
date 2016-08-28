@@ -18,6 +18,11 @@ function SimpleVideoRecorder(settings) {
             console.log('Ready!');
         };
     }
+    if (!settings.onformatdetermined) {
+        settings.onformatdetermined = function (mime) {
+            console.log('Output file will be in format: ' + mime);
+        };
+    }
     if (!settings.onstarted) {
         settings.onstarted = function () {
             console.log('Started!');
@@ -48,7 +53,10 @@ function SimpleVideoRecorder(settings) {
         function (stream) {
             showPreview(stream);
             try {
-                var options = {mimeType: 'video/webm'};
+                var mimeToUse = getMimeToUse();
+                if (!mimeToUse) return;
+                method._settings.onformatdetermined(mimeToUse);
+                var options = {mimeType: mimeToUse};
                 method._mediaRecorder = new MediaRecorder(stream, options);
             } catch (e) {
                 method._settings.onerror(e);
@@ -68,7 +76,16 @@ function SimpleVideoRecorder(settings) {
     );
 }
 
-method.resumePreview = function() {
+function getMimeToUse() {
+    if (MediaRecorder.isTypeSupported('video/webm')) {
+        return 'video/webm';
+    } else {
+        method._settings.onerror('This browser does not support webm video recording! Please use Chrome or Firefox.');
+        return null;
+    }
+}
+
+method.resumePreview = function () {
     if (!method._settings.previewView) {
         console.log('WARNING: No previewView provided to display the camera preview.');
         return;
@@ -100,7 +117,7 @@ function setupMediaRecorder() {
 }
 
 method.start = function () {
-    if(!method._mediaRecorder) {
+    if (!method._mediaRecorder) {
         console.log('WARNING: The recorder has not been prepared yet. Wait for onready.');
         return;
     }

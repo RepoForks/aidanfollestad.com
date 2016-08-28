@@ -18,6 +18,11 @@ function SimpleAudioRecorder(settings) {
             console.log('Ready!');
         };
     }
+    if (!settings.onformatdetermined) {
+        settings.onformatdetermined = function (mime) {
+            console.log('Output file will be in format: ' + mime);
+        };
+    }
     if (!settings.onstarted) {
         settings.onstarted = function () {
             console.log('Started!');
@@ -47,7 +52,11 @@ function SimpleAudioRecorder(settings) {
         // Success callback
         function (stream) {
             try {
-                method._mediaRecorder = new MediaRecorder(stream);
+                var mimeToUse = getMimeToUse();
+                if (!mimeToUse) return;
+                method._settings.onformatdetermined(mimeToUse);
+                var options = {mimeType: mimeToUse};
+                method._mediaRecorder = new MediaRecorder(stream, options);
             } catch (e) {
                 method._settings.onerror(e);
                 return;
@@ -66,6 +75,17 @@ function SimpleAudioRecorder(settings) {
     );
 }
 
+function getMimeToUse() {
+    if (MediaRecorder.isTypeSupported('audio/webm')) {
+        return 'audio/webm';
+    } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+        return 'audio/ogg';
+    } else {
+        method._settings.onerror('This browser does not support webm or ogg audio recording! Please use Chrome or Firefox.');
+        return null;
+    }
+}
+
 function setupMediaRecorder() {
     method._chunks = [];
     var recorder = method._mediaRecorder;
@@ -73,14 +93,14 @@ function setupMediaRecorder() {
         method._chunks.push(e.data);
     };
     recorder.onstop = function (e) {
-        var blob = new Blob(method._chunks, { 'type': 'audio/webm'});
+        var blob = new Blob(method._chunks, {'type': 'audio/webm'});
         method._chunks = [];
         method._settings.onstopped(blob);
     };
 }
 
 method.start = function () {
-    if(!method._mediaRecorder) {
+    if (!method._mediaRecorder) {
         console.log('WARNING: The recorder has not been prepared yet. Wait for onready.');
         return;
     }
