@@ -20,7 +20,7 @@ function SimpleAudioRecorder(settings) {
     }
     if (!settings.onstarted) {
         settings.onstarted = function () {
-            console.log('Started!');
+            console.log('Started! mimeType = ' + method._mediaRecorder.mimeType);
         };
     }
     if (!settings.onstopped) {
@@ -46,8 +46,8 @@ function SimpleAudioRecorder(settings) {
 
         // Success callback
         function (stream) {
-            var options = {mimeType: 'audio/webm'};
-            method._mediaRecorder = new MediaRecorder(stream, options);
+            // var options = {mimeType: 'audio/webm'};
+            method._mediaRecorder = new MediaRecorder(stream);
             if (!method._mediaRecorder) {
                 method._settings.onerror('The media recorder API isn\'t supported in this browser!');
                 return;
