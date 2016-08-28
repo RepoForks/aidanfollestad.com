@@ -10,7 +10,7 @@ function SimpleAudioRecorder(settings) {
     }
     if (!settings.onerror) {
         settings.onerror = function (err) {
-            console.log('Error: ' + err)
+            console.log('Error: ' + err);
         };
     }
     if (!settings.onready) {
@@ -20,7 +20,7 @@ function SimpleAudioRecorder(settings) {
     }
     if (!settings.onstarted) {
         settings.onstarted = function () {
-            console.log('Started! mimeType = ' + method._mediaRecorder.mimeType);
+            console.log('Started!');
         };
     }
     if (!settings.onstopped) {
@@ -34,7 +34,7 @@ function SimpleAudioRecorder(settings) {
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia;
     if (!navigator.getUserMedia) {
-        this._settings.onerror('The media recorder API isn\'t supported in this browser!');
+        method._settings.onerror('The media recorder API isn\'t supported in this browser!');
         return;
     }
 
@@ -46,8 +46,12 @@ function SimpleAudioRecorder(settings) {
 
         // Success callback
         function (stream) {
-            // var options = {mimeType: 'audio/webm'};
-            method._mediaRecorder = new MediaRecorder(stream);
+            try {
+                method._mediaRecorder = new MediaRecorder(stream);
+            } catch (e) {
+                method._settings.onerror(e);
+                return;
+            }
             if (!method._mediaRecorder) {
                 method._settings.onerror('The media recorder API isn\'t supported in this browser!');
                 return;
@@ -69,7 +73,7 @@ function setupMediaRecorder() {
         method._chunks.push(e.data);
     };
     recorder.onstop = function (e) {
-        var blob = new Blob(method._chunks, {'type': 'audio/webm'});
+        var blob = new Blob(method._chunks, { 'type': 'audio/webm'});
         method._chunks = [];
         method._settings.onstopped(blob);
     };
@@ -78,13 +82,17 @@ function setupMediaRecorder() {
 method.start = function () {
     setupMediaRecorder();
     method._mediaRecorder.start();
-    console.log(method._mediaRecorder.state);
-    this._settings.onstarted();
+    method._settings.onstarted();
+    console.log('mimeType: ' + method._mediaRecorder.mimeType);
 };
 
 method.stop = function () {
     method._mediaRecorder.stop();
-    console.log(method._mediaRecorder.state);
+};
+
+method.release = function () {
+    if (method._stream)
+        method._stream.stop();
 };
 
 // module.exports = SimpleAudioRecorder;
