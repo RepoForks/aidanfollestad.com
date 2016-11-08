@@ -30,7 +30,6 @@ router.get('/social', function (req, res) {
 });
 
 router.post('/test_webhook', require('multer')({dest: 'public/uploads/'}).any(), function (req, res) {
-    console.log('Headers: ' + JSON.stringify(req.headers, null, 4));
     console.log('Body: ' + JSON.stringify(req.body, null, 4));
     res.send({success: true});
 });
